@@ -1,3 +1,4 @@
+import Big from "big.js";
 import { EIP721Schemas, getDomainData } from "./utils/crypto";
 import { SignedPayload, WalletClient, toEthNumber } from "./utils/crypto";
 import {
@@ -244,5 +245,42 @@ export async function signReplaceStopLimitOrder(
   return {
     ...normalize,
     signature: signer.serializeSignature(signature),
+  };
+}
+
+export interface TradingBalanceWithdraw {
+  recipient: string;
+  amount: Big.BigSource;
+}
+
+export interface NormalizeTradingBalanceWithdraw extends Pick<TradingBalanceWithdraw, "recipient"> {
+  amount: string;
+}
+
+export interface SignedTradingBalanceWithdraw extends NormalizeTradingBalanceWithdraw {
+  signature: string;
+}
+
+export async function signTradingBalanceWithdraw(
+  signer: WalletClient,
+  withdraw: TradingBalanceWithdraw,
+): Promise<SignedTradingBalanceWithdraw> {
+  const normalize: NormalizeTradingBalanceWithdraw = {
+    recipient: withdraw.recipient,
+    amount: toMatcherNumber(withdraw.amount),
+  };
+
+  const signature = await signer.signTypedData(
+    getDomainData(await signer.getChainId()),
+    EIP721Schemas.withdraw,
+    {
+      recipient: withdraw.recipient,
+      amount: toEthNumber(normalize.amount),
+    },
+  );
+
+  return {
+    ...normalize,
+    signature,
   };
 }
