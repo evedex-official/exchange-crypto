@@ -10,6 +10,7 @@ import {
   ReplaceLimitOrder,
   ReplaceStopLimitOrder,
   StopLimitOrder,
+  TpSl,
 } from "./utils/exchange";
 import { toMatcherNumber } from "./utils/numeric";
 export * as utils from "./utils";
@@ -188,12 +189,12 @@ export interface SignedReplaceLimitOrder extends NormalizeReplaceLimitOrder, Sig
 
 export async function signReplaceLimitOrder(
   signer: WalletClient,
-  orderPayload: ReplaceLimitOrder,
+  order: ReplaceLimitOrder,
 ): Promise<SignedReplaceLimitOrder> {
   const normalize: NormalizeReplaceLimitOrder = {
-    orderId: orderPayload.orderId,
-    quantity: toMatcherNumber(orderPayload.quantity),
-    limitPrice: toMatcherNumber(orderPayload.limitPrice),
+    orderId: order.orderId,
+    quantity: toMatcherNumber(order.quantity),
+    limitPrice: toMatcherNumber(order.limitPrice),
   };
 
   const signature = await signer.signTypedData(
@@ -222,13 +223,13 @@ export interface SignedReplaceStopLimitOrder
 
 export async function signReplaceStopLimitOrder(
   signer: WalletClient,
-  orderPayload: ReplaceStopLimitOrder,
+  order: ReplaceStopLimitOrder,
 ): Promise<SignedReplaceStopLimitOrder> {
   const normalize: NormalizeReplaceStopLimitOrder = {
-    orderId: orderPayload.orderId,
-    quantity: toMatcherNumber(orderPayload.quantity),
-    limitPrice: toMatcherNumber(orderPayload.limitPrice),
-    stopPrice: toMatcherNumber(orderPayload.stopPrice),
+    orderId: order.orderId,
+    quantity: toMatcherNumber(order.quantity),
+    limitPrice: toMatcherNumber(order.limitPrice),
+    stopPrice: toMatcherNumber(order.stopPrice),
   };
 
   const signature = await signer.signTypedData(
@@ -282,5 +283,40 @@ export async function signTradingBalanceWithdraw(
   return {
     ...normalize,
     signature,
+  };
+}
+
+export interface NormalizeTpSl extends Pick<TpSl, "instrument" | "side" | "type" | "order"> {
+  quantity: string;
+  price: string;
+}
+
+export interface SignedTpSl extends NormalizeTpSl {
+  signature: string;
+}
+
+export async function signTpSl(signer: WalletClient, tpsl: TpSl): Promise<SignedTpSl> {
+  const normalize: NormalizeTpSl = {
+    instrument: tpsl.instrument,
+    type: tpsl.type,
+    side: tpsl.side,
+    quantity: toMatcherNumber(tpsl.quantity),
+    price: toMatcherNumber(tpsl.price),
+    order: tpsl.order,
+  };
+
+  const signature = await signer.signTypedData(
+    getDomainData(await signer.getChainId()),
+    EIP721Schemas.createTpSl,
+    {
+      ...normalize,
+      quantity: toEthNumber(normalize.quantity),
+      price: toEthNumber(normalize.price),
+    },
+  );
+
+  return {
+    ...normalize,
+    signature: signer.serializeSignature(signature),
   };
 }
