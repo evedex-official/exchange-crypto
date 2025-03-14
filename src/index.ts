@@ -1,6 +1,12 @@
 import Big from "big.js";
-import { EIP721Schemas, getDomainData } from "./utils/crypto";
-import { SignedPayload, WalletClient, toEthNumber } from "./utils/crypto";
+import {
+  EIP721Schemas,
+  getDomainData,
+  SignedPayload,
+  WalletClient,
+  toEthNumber,
+  NetworkChain,
+} from "./utils/crypto";
 import {
   CreateBaseOrder,
   LimitOrder,
@@ -36,7 +42,7 @@ export async function signAuth(signer: WalletClient, payload: AuthPayload): Prom
   };
 }
 
-export interface NormalizeLimitOrder extends CreateBaseOrder {
+export interface NormalizeLimitOrder extends CreateBaseOrder, NetworkChain {
   quantity: string;
   limitPrice: string;
 }
@@ -50,17 +56,21 @@ export async function signLimitOrder(
   signer: WalletClient,
   order: LimitOrder,
 ): Promise<SignedLimitOrder> {
+  const chainId = await signer.getChainId();
+
   const normalize: NormalizeLimitOrder = {
+    id: order.id,
     instrument: order.instrument,
     side: order.side,
     leverage: order.leverage,
     quantity: toMatcherNumber(order.quantity),
     limitPrice: toMatcherNumber(order.limitPrice),
     tpsl: order.tpsl,
+    chainId,
   };
 
   const signature = await signer.signTypedData(
-    getDomainData(await signer.getChainId()),
+    getDomainData(chainId),
     EIP721Schemas.createLimitOrder,
     {
       ...normalize,
@@ -75,7 +85,10 @@ export async function signLimitOrder(
   };
 }
 
-export interface NormalizeMarketOrder extends CreateBaseOrder, Pick<MarketOrder, "timeInForce"> {
+export interface NormalizeMarketOrder
+  extends CreateBaseOrder,
+    Pick<MarketOrder, "timeInForce">,
+    NetworkChain {
   cashQuantity: string;
 }
 
@@ -85,17 +98,21 @@ export async function signMarketOrder(
   signer: WalletClient,
   order: MarketOrder,
 ): Promise<SignedMarketOrder> {
+  const chainId = await signer.getChainId();
+
   const normalize: NormalizeMarketOrder = {
+    id: order.id,
     instrument: order.instrument,
     side: order.side,
     timeInForce: order.timeInForce,
     leverage: order.leverage,
     cashQuantity: toMatcherNumber(order.cashQuantity),
     tpsl: order.tpsl,
+    chainId,
   };
 
   const signature = await signer.signTypedData(
-    getDomainData(await signer.getChainId()),
+    getDomainData(chainId),
     EIP721Schemas.createMarketOrder,
     {
       ...normalize,
@@ -109,7 +126,7 @@ export async function signMarketOrder(
   };
 }
 
-export interface NormalizeStopLimitOrder extends CreateBaseOrder {
+export interface NormalizeStopLimitOrder extends CreateBaseOrder, NetworkChain {
   quantity: string;
   limitPrice: string;
   stopPrice: string;
@@ -121,7 +138,10 @@ export async function signStopLimitOrder(
   signer: WalletClient,
   order: StopLimitOrder,
 ): Promise<SignedStopLimitOrder> {
+  const chainId = await signer.getChainId();
+
   const normalize: NormalizeStopLimitOrder = {
+    id: order.id,
     instrument: order.instrument,
     side: order.side,
     leverage: order.leverage,
@@ -129,10 +149,11 @@ export async function signStopLimitOrder(
     limitPrice: toMatcherNumber(order.limitPrice),
     stopPrice: toMatcherNumber(order.stopPrice),
     tpsl: order.tpsl,
+    chainId,
   };
 
   const signature = await signer.signTypedData(
-    getDomainData(await signer.getChainId()),
+    getDomainData(chainId),
     EIP721Schemas.createStopLimitOrder,
     {
       ...normalize,
@@ -149,7 +170,8 @@ export async function signStopLimitOrder(
 }
 
 export interface NormalizePositionCloseOrder
-  extends Pick<PositionCloseOrder, "instrument" | "leverage"> {
+  extends Pick<PositionCloseOrder, "instrument" | "leverage" | "id">,
+    NetworkChain {
   quantity: string;
 }
 
@@ -159,14 +181,18 @@ export async function signPositionCloseOrder(
   signer: WalletClient,
   order: PositionCloseOrder,
 ): Promise<SignedPositionCloseOrder> {
+  const chainId = await signer.getChainId();
+
   const normalize: NormalizePositionCloseOrder = {
+    id: order.id,
     instrument: order.instrument,
     leverage: order.leverage,
     quantity: toMatcherNumber(order.quantity),
+    chainId,
   };
 
   const signature = await signer.signTypedData(
-    getDomainData(await signer.getChainId()),
+    getDomainData(chainId),
     EIP721Schemas.createPositionCloseOrder,
     {
       ...normalize,
