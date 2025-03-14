@@ -15,37 +15,45 @@ export const EIP721Schemas = {
   },
   createLimitOrder: {
     "New limit order": [
+      { name: "id", type: "string" },
       { name: "instrument", type: "string" },
       { name: "side", type: "string" },
       { name: "leverage", type: "uint8" },
       { name: "quantity", type: "uint96" },
       { name: "limitPrice", type: "uint80" },
+      { name: "chainId", type: "uint256" },
     ],
   },
   createMarketOrder: {
     "New market order": [
+      { name: "id", type: "string" },
       { name: "instrument", type: "string" },
       { name: "side", type: "string" },
       { name: "timeInForce", type: "string" },
       { name: "leverage", type: "uint8" },
       { name: "cashQuantity", type: "uint96" },
+      { name: "chainId", type: "uint256" },
     ],
   },
   createStopLimitOrder: {
     "New stop-limit order": [
+      { name: "id", type: "string" },
       { name: "instrument", type: "string" },
       { name: "side", type: "string" },
       { name: "leverage", type: "uint8" },
       { name: "quantity", type: "uint96" },
       { name: "limitPrice", type: "uint80" },
       { name: "stopPrice", type: "uint80" },
+      { name: "chainId", type: "uint256" },
     ],
   },
   createPositionCloseOrder: {
     "Position close order": [
+      { name: "id", type: "string" },
       { name: "instrument", type: "string" },
       { name: "leverage", type: "uint8" },
       { name: "quantity", type: "uint96" },
+      { name: "chainId", type: "uint256" },
     ],
   },
   createTpSl: {
@@ -87,6 +95,10 @@ export function toEthNumber(value: Big.BigSource) {
 
 export interface SignedPayload {
   signature: string;
+}
+
+export interface NetworkChain {
+  chainId: string;
 }
 
 export interface TypedDataDomain {

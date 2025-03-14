@@ -26,6 +26,7 @@ export interface TpSl extends OrderTpSl {
 }
 
 export interface CreateBaseOrder {
+  id: string;
   instrument: string;
   side: Side;
   leverage: number;
@@ -49,6 +50,7 @@ export interface StopLimitOrder extends CreateBaseOrder {
 }
 
 export interface PositionCloseOrder {
+  id: string;
   instrument: string;
   leverage: number;
   quantity: Big.BigSource;
