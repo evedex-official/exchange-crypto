@@ -19,6 +19,7 @@ import {
   TpSl,
 } from "./utils/exchange";
 import { toMatcherNumber } from "./utils/numeric";
+import { validatePayload } from "./utils/validate";
 export * as utils from "./utils";
 
 export interface AuthPayload {
@@ -56,6 +57,8 @@ export async function signLimitOrder(
   signer: WalletClient,
   order: LimitOrder,
 ): Promise<SignedLimitOrder> {
+  validatePayload(order, EIP721Schemas.createLimitOrder);
+
   const chainId = await signer.getChainId();
 
   const normalize: NormalizeLimitOrder = {
@@ -98,6 +101,8 @@ export async function signMarketOrder(
   signer: WalletClient,
   order: MarketOrder,
 ): Promise<SignedMarketOrder> {
+  validatePayload(order, EIP721Schemas.createMarketOrder);
+
   const chainId = await signer.getChainId();
 
   const normalize: NormalizeMarketOrder = {
@@ -138,6 +143,8 @@ export async function signStopLimitOrder(
   signer: WalletClient,
   order: StopLimitOrder,
 ): Promise<SignedStopLimitOrder> {
+  validatePayload(order, EIP721Schemas.createStopLimitOrder);
+
   const chainId = await signer.getChainId();
 
   const normalize: NormalizeStopLimitOrder = {
@@ -181,6 +188,8 @@ export async function signPositionCloseOrder(
   signer: WalletClient,
   order: PositionCloseOrder,
 ): Promise<SignedPositionCloseOrder> {
+  validatePayload(order, EIP721Schemas.createPositionCloseOrder);
+
   const chainId = await signer.getChainId();
 
   const normalize: NormalizePositionCloseOrder = {
@@ -217,6 +226,8 @@ export async function signReplaceLimitOrder(
   signer: WalletClient,
   order: ReplaceLimitOrder,
 ): Promise<SignedReplaceLimitOrder> {
+  validatePayload(order, EIP721Schemas.replaceLimitOrder);
+
   const normalize: NormalizeReplaceLimitOrder = {
     orderId: order.orderId,
     quantity: toMatcherNumber(order.quantity),
@@ -251,6 +262,8 @@ export async function signReplaceStopLimitOrder(
   signer: WalletClient,
   order: ReplaceStopLimitOrder,
 ): Promise<SignedReplaceStopLimitOrder> {
+  validatePayload(order, EIP721Schemas.replaceStopLimitOrder);
+
   const normalize: NormalizeReplaceStopLimitOrder = {
     orderId: order.orderId,
     quantity: toMatcherNumber(order.quantity),
@@ -292,6 +305,8 @@ export async function signTradingBalanceWithdraw(
   signer: WalletClient,
   withdraw: TradingBalanceWithdraw,
 ): Promise<SignedTradingBalanceWithdraw> {
+  validatePayload(withdraw, EIP721Schemas.withdraw);
+
   const normalize: NormalizeTradingBalanceWithdraw = {
     recipient: withdraw.recipient,
     amount: toMatcherNumber(withdraw.amount),
@@ -322,6 +337,8 @@ export interface SignedTpSl extends NormalizeTpSl {
 }
 
 export async function signTpSl(signer: WalletClient, tpsl: TpSl): Promise<SignedTpSl> {
+  validatePayload(tpsl, EIP721Schemas.createTpSl);
+
   const normalize: NormalizeTpSl = {
     instrument: tpsl.instrument,
     type: tpsl.type,
