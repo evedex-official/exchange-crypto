@@ -57,9 +57,9 @@ export async function signLimitOrder(
   signer: WalletClient,
   order: LimitOrder,
 ): Promise<SignedLimitOrder> {
-  validatePayload(order, EIP721Schemas.createLimitOrder);
-
   const chainId = await signer.getChainId();
+
+  validatePayload({ ...order, chainId }, EIP721Schemas.createLimitOrder);
 
   const normalize: NormalizeLimitOrder = {
     id: order.id,
@@ -101,9 +101,9 @@ export async function signMarketOrder(
   signer: WalletClient,
   order: MarketOrder,
 ): Promise<SignedMarketOrder> {
-  validatePayload(order, EIP721Schemas.createMarketOrder);
-
   const chainId = await signer.getChainId();
+
+  validatePayload({ ...order, chainId }, EIP721Schemas.createMarketOrder);
 
   const normalize: NormalizeMarketOrder = {
     id: order.id,
@@ -143,9 +143,9 @@ export async function signStopLimitOrder(
   signer: WalletClient,
   order: StopLimitOrder,
 ): Promise<SignedStopLimitOrder> {
-  validatePayload(order, EIP721Schemas.createStopLimitOrder);
-
   const chainId = await signer.getChainId();
+
+  validatePayload({ ...order, chainId }, EIP721Schemas.createStopLimitOrder);
 
   const normalize: NormalizeStopLimitOrder = {
     id: order.id,
@@ -188,9 +188,9 @@ export async function signPositionCloseOrder(
   signer: WalletClient,
   order: PositionCloseOrder,
 ): Promise<SignedPositionCloseOrder> {
-  validatePayload(order, EIP721Schemas.createPositionCloseOrder);
-
   const chainId = await signer.getChainId();
+
+  validatePayload({ ...order, chainId }, EIP721Schemas.createPositionCloseOrder);
 
   const normalize: NormalizePositionCloseOrder = {
     id: order.id,
