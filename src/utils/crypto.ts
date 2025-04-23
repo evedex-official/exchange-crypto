@@ -3,7 +3,7 @@ import { MATCHER_PRECISION } from "./constants";
 
 export const EIP721Schemas = {
   domain: {
-    name: "EventHorizon",
+    name: "EVEDEX",
     version: "1",
     salt: "0x5792f7333c35db190e30acc144f049fd15b24f552c0010b8b3e06f9105c37c5a",
   },

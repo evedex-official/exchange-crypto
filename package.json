@@ -1,5 +1,5 @@
 {
-  "name": "@eventhorizon/exchange-crypto",
+  "name": "@evedex/exchange-crypto",
   "version": "1.0.8",
   "description": "",
   "main": "dist/cjs/index.js",
@@ -27,7 +27,6 @@
   },
   "devDependencies": {
     "@semantic-release/git": "^10.0.1",
-    "@semantic-release/gitlab": "^13.1.0",
     "@semantic-release/npm": "^12.0.1",
     "@types/big.js": "^6.2.2",
     "@types/chai": "^5.2.1",
@@ -58,5 +57,9 @@
   "dependencies": {
     "big.js": "^6.2.2",
     "ethers": "^6.13.5"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "tag": "latest"
   }
 }
