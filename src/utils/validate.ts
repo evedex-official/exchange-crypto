@@ -15,7 +15,7 @@ export function validatePayload(
   const [schemaFields] = Object.values(schema);
 
   schemaFields.forEach((field) => {
-    if (!payload[field.name]) {
+    if (payload[field.name] === undefined || payload[field.name] === null) {
       throw new Error(`Missing field "${field.name}" in payload`);
     }
 
