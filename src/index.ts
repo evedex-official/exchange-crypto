@@ -20,6 +20,7 @@ import {
 } from "./utils/exchange";
 import { toMatcherNumber } from "./utils/numeric";
 import { validatePayload } from "./utils/validate";
+import { MATCHER_PRECISION } from "./utils";
 export * as utils from "./utils";
 
 export interface AuthPayload {
@@ -309,7 +310,7 @@ export async function signTradingBalanceWithdraw(
 
   const normalize: NormalizeTradingBalanceWithdraw = {
     recipient: withdraw.recipient,
-    amount: toMatcherNumber(withdraw.amount),
+    amount: Big(withdraw.amount).round(MATCHER_PRECISION, Big.roundDown).toString(),
   };
 
   const signature = await signer.signTypedData(
