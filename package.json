@@ -57,7 +57,8 @@
   "license": "ISC",
   "dependencies": {
     "big.js": "^6.2.2",
-    "ethers": "^6.13.5"
+    "ethers": "^6.13.5",
+    "siwe": "^3.0.0"
   },
   "publishConfig": {
     "access": "public",
