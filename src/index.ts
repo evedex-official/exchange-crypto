@@ -95,6 +95,7 @@ export async function signAuth(signer: WalletClient, payload: AuthPayload): Prom
 export interface NormalizeLimitOrder extends CreateBaseOrder, NetworkChain {
   quantity: string;
   limitPrice: string;
+  postOnly?: "yes";
 }
 
 export interface SignedLimitOrder extends NormalizeLimitOrder, SignedPayload {
@@ -119,6 +120,7 @@ export async function signLimitOrder(
     limitPrice: toMatcherNumber(order.limitPrice),
     tpsl: order.tpsl,
     chainId,
+    ...(order.postOnly && { postOnly: "yes" }),
   };
 
   const signature = await signer.signTypedData(
