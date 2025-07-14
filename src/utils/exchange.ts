@@ -36,6 +36,7 @@ export interface CreateBaseOrder {
 export interface LimitOrder extends CreateBaseOrder {
   quantity: Big.BigSource;
   limitPrice: Big.BigSource;
+  postOnly: boolean;
 }
 
 export interface MarketOrder extends CreateBaseOrder {
