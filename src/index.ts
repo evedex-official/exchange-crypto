@@ -120,7 +120,6 @@ export async function signLimitOrder(
     limitPrice: toMatcherNumber(order.limitPrice),
     tpsl: order.tpsl,
     chainId,
-    ...(order.postOnly && { postOnly: "yes" }),
   };
 
   const signature = await signer.signTypedData(
@@ -135,6 +134,7 @@ export async function signLimitOrder(
 
   return {
     ...normalize,
+    ...(order.postOnly && { postOnly: "yes" }),
     signature: signer.serializeSignature(signature),
   };
 }
