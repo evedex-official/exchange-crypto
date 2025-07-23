@@ -64,6 +64,7 @@ export interface ReplaceBaseOrder {
 export interface ReplaceLimitOrder extends ReplaceBaseOrder {
   quantity: Big.BigSource;
   limitPrice: Big.BigSource;
+  postOnly: boolean;
 }
 
 export interface ReplaceStopLimitOrder extends ReplaceLimitOrder {

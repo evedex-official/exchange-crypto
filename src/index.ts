@@ -269,6 +269,7 @@ export async function signPositionCloseOrder(
 export interface NormalizeReplaceLimitOrder extends ReplaceBaseOrder {
   quantity: string;
   limitPrice: string;
+  postOnly?: "yes";
 }
 
 export interface SignedReplaceLimitOrder extends NormalizeReplaceLimitOrder, SignedPayload {}
@@ -297,6 +298,7 @@ export async function signReplaceLimitOrder(
 
   return {
     ...normalize,
+    ...(order.postOnly && { postOnly: "yes" }),
     signature: signer.serializeSignature(signature),
   };
 }
