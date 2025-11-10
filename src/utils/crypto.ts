@@ -80,6 +80,9 @@ export const EIP721Schemas = {
       { name: "stopPrice", type: "uint80" },
     ],
   },
+  oauthConsent: {
+    "Oauth consent": [{ name: "oauthRequestId", type: "string" }],
+  },
 };
 
 export function getDomainData(chainId: string) {
