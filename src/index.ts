@@ -18,6 +18,7 @@ import {
   ReplaceStopLimitOrder,
   StopLimitOrder,
   TpSl,
+  type OauthConsent,
 } from "./utils/exchange";
 import { toMatcherNumber } from "./utils/numeric";
 import { validatePayload } from "./utils/validate";
@@ -354,6 +355,10 @@ export interface SignedTradingBalanceWithdraw extends NormalizeTradingBalanceWit
   signature: string;
 }
 
+export interface SignedOauthConsentRequest extends OauthConsent {
+  signature: string;
+}
+
 export async function signTradingBalanceWithdraw(
   signer: WalletClient,
   withdraw: TradingBalanceWithdraw,
@@ -414,5 +419,27 @@ export async function signTpSl(signer: WalletClient, tpsl: TpSl): Promise<Signed
   return {
     ...normalize,
     signature: signer.serializeSignature(signature),
+  };
+}
+
+export async function signOauthConsentTequest(
+  signer: WalletClient,
+  payload: OauthConsent,
+): Promise<SignedOauthConsentRequest> {
+  const { oauthRequestId } = payload;
+
+  validatePayload({ oauthRequestId }, EIP721Schemas.oauthConsent);
+
+  const signature = await signer.signTypedData(
+    getDomainData(await signer.getChainId()),
+    EIP721Schemas.oauthConsent,
+    {
+      oauthRequestId,
+    },
+  );
+
+  return {
+    ...payload,
+    signature,
   };
 }

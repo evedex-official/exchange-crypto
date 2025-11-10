@@ -70,3 +70,9 @@ export interface ReplaceLimitOrder extends ReplaceBaseOrder {
 export interface ReplaceStopLimitOrder extends ReplaceLimitOrder {
   stopPrice: Big.BigSource;
 }
+
+export interface OauthConsent {
+  oauthRequestId: string;
+  apiKeyEnabled: boolean;
+  octWalletPrivateKey?: string;
+}
