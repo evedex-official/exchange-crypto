@@ -1,7 +1,7 @@
 import Big from "big.js";
 import { MATCHER_PRECISION } from "./constants";
 
-export const EIP721Schemas = {
+export const EIP712Schemas = {
   domain: {
     name: "EVEDEX",
     version: "2",
@@ -87,7 +87,7 @@ export const EIP721Schemas = {
 
 export function getDomainData(chainId: string) {
   return {
-    ...EIP721Schemas.domain,
+    ...EIP712Schemas.domain,
     chainId,
   };
 }
