@@ -1,7 +1,7 @@
 import Big from "big.js";
 import { SiweMessage } from "siwe";
 import {
-  EIP721Schemas,
+  EIP712Schemas,
   getDomainData,
   SignedPayload,
   WalletClient,
@@ -110,7 +110,7 @@ export async function signLimitOrder(
 ): Promise<SignedLimitOrder> {
   const chainId = await signer.getChainId();
 
-  validatePayload({ ...order, chainId }, EIP721Schemas.createLimitOrder);
+  validatePayload({ ...order, chainId }, EIP712Schemas.createLimitOrder);
 
   const normalize: NormalizeLimitOrder = {
     id: order.id,
@@ -125,7 +125,7 @@ export async function signLimitOrder(
 
   const signature = await signer.signTypedData(
     getDomainData(chainId),
-    EIP721Schemas.createLimitOrder,
+    EIP712Schemas.createLimitOrder,
     {
       ...normalize,
       quantity: toEthNumber(normalize.quantity),
@@ -155,7 +155,7 @@ export async function signMarketOrder(
 ): Promise<SignedMarketOrder> {
   const chainId = await signer.getChainId();
 
-  validatePayload({ ...order, chainId }, EIP721Schemas.createMarketOrder);
+  validatePayload({ ...order, chainId }, EIP712Schemas.createMarketOrder);
 
   const normalize: NormalizeMarketOrder = {
     id: order.id,
@@ -170,7 +170,7 @@ export async function signMarketOrder(
 
   const signature = await signer.signTypedData(
     getDomainData(chainId),
-    EIP721Schemas.createMarketOrder,
+    EIP712Schemas.createMarketOrder,
     {
       ...normalize,
       cashQuantity: toEthNumber(normalize.cashQuantity),
@@ -197,7 +197,7 @@ export async function signStopLimitOrder(
 ): Promise<SignedStopLimitOrder> {
   const chainId = await signer.getChainId();
 
-  validatePayload({ ...order, chainId }, EIP721Schemas.createStopLimitOrder);
+  validatePayload({ ...order, chainId }, EIP712Schemas.createStopLimitOrder);
 
   const normalize: NormalizeStopLimitOrder = {
     id: order.id,
@@ -213,7 +213,7 @@ export async function signStopLimitOrder(
 
   const signature = await signer.signTypedData(
     getDomainData(chainId),
-    EIP721Schemas.createStopLimitOrder,
+    EIP712Schemas.createStopLimitOrder,
     {
       ...normalize,
       quantity: toEthNumber(normalize.quantity),
@@ -242,7 +242,7 @@ export async function signPositionCloseOrder(
 ): Promise<SignedPositionCloseOrder> {
   const chainId = await signer.getChainId();
 
-  validatePayload({ ...order, chainId }, EIP721Schemas.createPositionCloseOrder);
+  validatePayload({ ...order, chainId }, EIP712Schemas.createPositionCloseOrder);
 
   const normalize: NormalizePositionCloseOrder = {
     id: order.id,
@@ -254,7 +254,7 @@ export async function signPositionCloseOrder(
 
   const signature = await signer.signTypedData(
     getDomainData(chainId),
-    EIP721Schemas.createPositionCloseOrder,
+    EIP712Schemas.createPositionCloseOrder,
     {
       ...normalize,
       quantity: toEthNumber(normalize.quantity),
@@ -279,7 +279,7 @@ export async function signReplaceLimitOrder(
   signer: WalletClient,
   order: ReplaceLimitOrder,
 ): Promise<SignedReplaceLimitOrder> {
-  validatePayload(order, EIP721Schemas.replaceLimitOrder);
+  validatePayload(order, EIP712Schemas.replaceLimitOrder);
 
   const normalize: NormalizeReplaceLimitOrder = {
     orderId: order.orderId,
@@ -289,7 +289,7 @@ export async function signReplaceLimitOrder(
 
   const signature = await signer.signTypedData(
     getDomainData(await signer.getChainId()),
-    EIP721Schemas.replaceLimitOrder,
+    EIP712Schemas.replaceLimitOrder,
     {
       ...normalize,
       quantity: toEthNumber(normalize.quantity),
@@ -316,7 +316,7 @@ export async function signReplaceStopLimitOrder(
   signer: WalletClient,
   order: ReplaceStopLimitOrder,
 ): Promise<SignedReplaceStopLimitOrder> {
-  validatePayload(order, EIP721Schemas.replaceStopLimitOrder);
+  validatePayload(order, EIP712Schemas.replaceStopLimitOrder);
 
   const normalize: NormalizeReplaceStopLimitOrder = {
     orderId: order.orderId,
@@ -327,7 +327,7 @@ export async function signReplaceStopLimitOrder(
 
   const signature = await signer.signTypedData(
     getDomainData(await signer.getChainId()),
-    EIP721Schemas.replaceStopLimitOrder,
+    EIP712Schemas.replaceStopLimitOrder,
     {
       ...normalize,
       quantity: toEthNumber(normalize.quantity),
@@ -363,7 +363,7 @@ export async function signTradingBalanceWithdraw(
   signer: WalletClient,
   withdraw: TradingBalanceWithdraw,
 ): Promise<SignedTradingBalanceWithdraw> {
-  validatePayload(withdraw, EIP721Schemas.withdraw);
+  validatePayload(withdraw, EIP712Schemas.withdraw);
 
   const normalize: NormalizeTradingBalanceWithdraw = {
     recipient: withdraw.recipient,
@@ -372,7 +372,7 @@ export async function signTradingBalanceWithdraw(
 
   const signature = await signer.signTypedData(
     getDomainData(await signer.getChainId()),
-    EIP721Schemas.withdraw,
+    EIP712Schemas.withdraw,
     {
       recipient: withdraw.recipient,
       amount: toEthNumber(normalize.amount),
@@ -395,7 +395,7 @@ export interface SignedTpSl extends NormalizeTpSl {
 }
 
 export async function signTpSl(signer: WalletClient, tpsl: TpSl): Promise<SignedTpSl> {
-  validatePayload(tpsl, EIP721Schemas.createTpSl);
+  validatePayload(tpsl, EIP712Schemas.createTpSl);
 
   const normalize: NormalizeTpSl = {
     instrument: tpsl.instrument,
@@ -408,7 +408,7 @@ export async function signTpSl(signer: WalletClient, tpsl: TpSl): Promise<Signed
 
   const signature = await signer.signTypedData(
     getDomainData(await signer.getChainId()),
-    EIP721Schemas.createTpSl,
+    EIP712Schemas.createTpSl,
     {
       ...normalize,
       quantity: toEthNumber(normalize.quantity),
@@ -428,11 +428,11 @@ export async function signOauthConsentTequest(
 ): Promise<SignedOauthConsentRequest> {
   const { oauthRequestId } = payload;
 
-  validatePayload({ oauthRequestId }, EIP721Schemas.oauthConsent);
+  validatePayload({ oauthRequestId }, EIP712Schemas.oauthConsent);
 
   const signature = await signer.signTypedData(
     getDomainData(await signer.getChainId()),
-    EIP721Schemas.oauthConsent,
+    EIP712Schemas.oauthConsent,
     {
       oauthRequestId,
     },
