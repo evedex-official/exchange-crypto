@@ -136,6 +136,7 @@ export async function signLimitOrder(
   return {
     ...normalize,
     ...(order.postOnly && { postOnly: "yes" }),
+    ...(order.timeInForce ? { timeInForce: order.timeInForce } : {}),
     signature: signer.serializeSignature(signature),
   };
 }
