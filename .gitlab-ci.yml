@@ -2,6 +2,11 @@ default:
   image: node:22
   before_script:
     - npm ci
+    - sed -i "s/groups\/59\/-/projects\/${CI_PROJECT_ID}/" ${CI_PROJECT_DIR}/.npmrc
+    - |
+      {
+        echo "//gitlab.evedex-team.com/api/v4/projects/${CI_PROJECT_ID}/packages/npm/:_authToken=${GITLAB_TOKEN}"
+      } | tee --append ${CI_PROJECT_DIR}/.npmrc
     - npm run build
   cache:
     key: ${CI_COMMIT_REF_SLUG}
@@ -13,8 +18,11 @@ workflow:
     - if: $CI_COMMIT_BRANCH
 
 variables:
-  KUBERNETES_MEMORY_REQUEST: 1536Mi
-  KUBERNETES_MEMORY_LIMIT: 1536Mi
+  NPM_TOKEN: ${GITLAB_TOKEN}
+  DEPLOY_TOKEN: ${GITLAB_TOKEN}
+  GITLAB_TOKEN: ${GITLAB_TOKEN}
+  KUBERNETES_MEMORY_REQUEST: 1024Mi
+  KUBERNETES_MEMORY_LIMIT: 1024Mi
 
 stages:
   - release
@@ -23,7 +31,8 @@ publish:
   stage: release
 
   script:
-    - echo "$NPM_TOKEN"
+    - npm config set '//gitlab.evedex-team.com/api/v4/packages/npm/:_authToken' "${GITLAB_TOKEN}"
+    - npm config set '//gitlab.evedex-team.com/api/v4/projects/${CI_PROJECT_ID}/packages/npm/:_authToken' "${GITLAB_TOKEN}"
     - npx semantic-release
   rules:
     - if: $CI_COMMIT_BRANCH
