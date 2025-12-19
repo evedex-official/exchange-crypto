@@ -19,6 +19,7 @@ import {
   StopLimitOrder,
   TpSl,
   type OauthConsent,
+  type TimeInForce,
 } from "./utils/exchange";
 import { toMatcherNumber } from "./utils/numeric";
 import { validatePayload } from "./utils/validate";
@@ -97,6 +98,7 @@ export interface NormalizeLimitOrder extends CreateBaseOrder, NetworkChain {
   quantity: string;
   limitPrice: string;
   postOnly?: "yes";
+  timeInForce?: TimeInForce;
 }
 
 export interface SignedLimitOrder extends NormalizeLimitOrder, SignedPayload {
