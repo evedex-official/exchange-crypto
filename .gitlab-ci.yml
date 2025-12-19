@@ -23,6 +23,7 @@ publish:
   stage: release
 
   script:
+    - echo "$NPM_TOKEN"
     - npx semantic-release
   rules:
     - if: $CI_COMMIT_BRANCH
