@@ -2,6 +2,11 @@ default:
   image: node:22
   before_script:
     - npm ci
+    - sed -i "s/groups\/59\/-/projects\/${CI_PROJECT_ID}/" ${CI_PROJECT_DIR}/.npmrc
+    - |
+      {
+        echo "//gitlab.eventhorizon.life/api/v4/projects/${CI_PROJECT_ID}/packages/npm/:_authToken=${GITLAB_TOKEN}"
+      } | tee --append ${CI_PROJECT_DIR}/.npmrc
     - npm run build
   cache:
     key: ${CI_COMMIT_REF_SLUG}
