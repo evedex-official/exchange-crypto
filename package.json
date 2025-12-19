@@ -59,5 +59,10 @@
     "big.js": "^6.2.2",
     "ethers": "^6.13.5",
     "siwe": "^3.0.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/",
+    "tag": "latest"
   }
 }
