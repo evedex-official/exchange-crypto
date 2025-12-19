@@ -1,5 +1,5 @@
 {
-  "name": "@eventhorizon/exchange-crypto",
+  "name": "@evedex/exchange-crypto",
   "version": "1.0.22",
   "description": "",
   "main": "dist/cjs/index.js",
