@@ -23,6 +23,8 @@ publish:
   stage: release
 
   script:
+    - npm config set '//gitlab.eventhorizon.life/api/v4/packages/npm/:_authToken' "${GITLAB_TOKEN}"
+    - npm config set '//gitlab.eventhorizon.life/api/v4/projects/${CI_PROJECT_ID}/packages/npm/:_authToken' "${GITLAB_TOKEN}"
     - npx semantic-release
   rules:
     - if: $CI_COMMIT_BRANCH
