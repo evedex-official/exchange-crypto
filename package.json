@@ -1,7 +1,7 @@
 {
   "name": "@evedex/exchange-crypto",
   "version": "1.0.24",
-  "description": "",
+  "description": "exchange-crypto",
   "main": "dist/cjs/index.js",
   "module": "dist/mjs/index.js",
   "types": "dist/mjs/index.d.ts",
