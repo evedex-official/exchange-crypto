@@ -36,6 +36,8 @@ export interface CreateBaseOrder {
 export interface LimitOrder extends CreateBaseOrder {
   quantity: Big.BigSource;
   limitPrice: Big.BigSource;
+  postOnly: boolean;
+  timeInForce?: TimeInForce;
 }
 
 export interface MarketOrder extends CreateBaseOrder {
@@ -63,8 +65,15 @@ export interface ReplaceBaseOrder {
 export interface ReplaceLimitOrder extends ReplaceBaseOrder {
   quantity: Big.BigSource;
   limitPrice: Big.BigSource;
+  postOnly: boolean;
 }
 
 export interface ReplaceStopLimitOrder extends ReplaceLimitOrder {
   stopPrice: Big.BigSource;
+}
+
+export interface OauthConsent {
+  oauthRequestId: string;
+  apiKeyEnabled: boolean;
+  octWalletPrivateKey?: string;
 }

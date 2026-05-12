@@ -1,10 +1,10 @@
 import Big from "big.js";
 import { MATCHER_PRECISION } from "./constants";
 
-export const EIP721Schemas = {
+export const EIP712Schemas = {
   domain: {
-    name: "EventHorizon",
-    version: "1",
+    name: "EVEDEX",
+    version: "2",
     salt: "0x5792f7333c35db190e30acc144f049fd15b24f552c0010b8b3e06f9105c37c5a",
   },
   withdraw: {
@@ -80,11 +80,14 @@ export const EIP721Schemas = {
       { name: "stopPrice", type: "uint80" },
     ],
   },
+  oauthConsent: {
+    "Oauth consent": [{ name: "oauthRequestId", type: "string" }],
+  },
 };
 
 export function getDomainData(chainId: string) {
   return {
-    ...EIP721Schemas.domain,
+    ...EIP712Schemas.domain,
     chainId,
   };
 }
